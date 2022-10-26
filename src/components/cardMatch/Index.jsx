@@ -10,7 +10,7 @@ export const CardMatch = ({ teamA, teamB, matchHour }) => {
           <input
             type="number"
             min={0}
-            className="bg-red-300/[0.2] w-[55px] h-[55px] text-red-700 text-xl text-center"
+            className="bg-red-300/[0.2] w-[55px] h-[55px] text-red-700 text-xl text-center overflow-hidden "
           />
   
           <span className="mx-4 text-red-500 font-bold text-lg">X</span>
@@ -18,7 +18,7 @@ export const CardMatch = ({ teamA, teamB, matchHour }) => {
           <input
             type="number"
             min={0}
-            className="bg-red-300/[0.2] w-[55px] h-[55px] text-red-700 text-xl text-center"
+            className="bg-red-300/[0.2] w-[55px] h-[55px] text-red-700 text-xs text-center overflow-hidden "
           />
   
           <img src={`/images/flags/${teamB.slug}.png`} />

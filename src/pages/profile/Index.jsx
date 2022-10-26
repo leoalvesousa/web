@@ -15,7 +15,7 @@ export const Profile = () => {
             <a href="/dashboard">
               <Icon name="back" className="w-10" />
             </a>
-            <h3 className="text-2xl font-bold">Fábio Filho</h3>
+            <h3 className="text-2xl font-bold">User</h3>
           </div>
         </section>
 
