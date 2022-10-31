@@ -1,6 +1,31 @@
 import { Icon, Input } from "../../components/Index";
+import { useFormik} from 'formik';
+import * as Yup from 'yup';
+import axios from "axios";
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required("Preencha com o seu email").email("Preencha com um email valido"),
+  password: Yup.string().required("Preencha a sua senha").min(6, "A sua senha deve ter no minimo 6 caracteres")
+}) 
+
 
 export const Login = () => {
+
+   const formik = useFormik({
+    onSubmit: async (values) =>{
+     const res=  await axios.post("http://localhost:4000/auth/login",
+        {auth: values})
+        res.data 
+  },
+    
+    initialValues:{
+      name:"",
+      email:"",
+      username:"",
+      password:""
+    }, 
+      validationSchema
+        })
   return (
     <div>
       <header className="p-4 border border-b border-red-300">
@@ -22,7 +47,11 @@ export const Login = () => {
             type="text"
             name="email"
             label="Seu e-mail"
-            placeholder="Digite seu e-mail"
+            platouchedceholder="Digite seu e-mail"
+            error= {formik.touched.email && formik.errors.email}
+            value = {formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
 
           <Input
@@ -30,11 +59,14 @@ export const Login = () => {
             name="password"
             label="Sua Senha"
             placeholder="Digite sua senha"
+            error= {formik.touched.password && formik.errors.password}
+            value = {formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
-
-          <a href="/dashboard" className="block w-full text-center text-white bg-red-500 px-6 py-3 rounded-xl ">
+          <button type="submit" disabled= {!formik.isValid} className="block w-full text-center text-white bg-red-500 px-6 py-3 rounded-xl disabled:opacity-50"  > 
             Entrar
-          </a>
+          </button>
         </form>
       </main>
     </div>
