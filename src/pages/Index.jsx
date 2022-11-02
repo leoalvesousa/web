@@ -5,30 +5,27 @@ import { Login } from "./login";
 import { Profile } from "./profile";
 import { Signup } from "./signup";
 
-
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
+    {
+        path: "/",
+        element: <Home />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/signup",
+        element: <Signup />,
+    },
+    {
+        path: "/dashboard",
+        element: <Dashboard />,
+    },
+    {
+        path: "/profile",
+        element: <Profile />,
+    },
 ]);
 
-export const Router = () => (
-  <RouterProvider router={router} />
-)
+export const Router = () => <RouterProvider router={router} />;

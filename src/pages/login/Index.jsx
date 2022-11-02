@@ -2,6 +2,8 @@ import { Icon, Input } from "../../components/Index";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useLocalStorage } from "react-use";
+import { Navigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required("Preencha com o seu email").email("Preencha com um email valido"),
@@ -11,23 +13,28 @@ const validationSchema = Yup.object().shape({
 });
 
 export const Login = () => {
+    const [key, setKey] = useLocalStorage("key", {});
+
     const formik = useFormik({
         onSubmit: async (values) => {
-            const res = await axios.post("http://localhost:3000/auth/login", { auth: values });
-            res.data
-                .then((response) => response.json())
-                .then((response) => console.log(response))
-                .catch((err) => console.error(err));
+            const { data } = await axios({
+                method: "post",
+                baseURL: "http://localhost:3000",
+                url: "/auth/login",
+                data: values,
+            });
+            setKey(data);
         },
 
         initialValues: {
-            name: "",
             email: "",
-            username: "",
             password: "",
         },
         validationSchema,
     });
+    if (key) {
+        return <Navigate to='/dashboard' replace={true} />;
+    }
     return (
         <div>
             <header className='p-4 border border-b border-red-300'>
@@ -44,7 +51,7 @@ export const Login = () => {
                     <h2 className='text-xl font-bold'>Entre na sua conta</h2>
                 </div>
 
-                <form className='space-y-6 p-4'>
+                <form className='space-y-6 p-4' onSubmit={formik.handleSubmit}>
                     <Input
                         type='text'
                         name='email'
@@ -71,7 +78,7 @@ export const Login = () => {
                         disabled={!formik.isValid}
                         className='block w-full text-center text-white bg-red-500 px-6 py-3 rounded-xl disabled:opacity-50'
                     >
-                        Entrar
+                        {formik.isSubmitting ? "Carregando ..." : "Entrar"}
                     </button>
                 </form>
             </main>

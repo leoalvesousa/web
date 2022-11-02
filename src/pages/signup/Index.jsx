@@ -2,6 +2,8 @@ import { Icon, Input } from "../../components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useLocalStorage } from "react-use";
+import { Navigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Preencha seu nome"),
@@ -13,6 +15,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export const Signup = () => {
+    const [key, setKey] = useLocalStorage("key", {});
+
     const formik = useFormik({
         onSubmit: async (values) => {
             const { data } = await axios({
@@ -21,7 +25,7 @@ export const Signup = () => {
                 url: "/auth/register",
                 data: values,
             });
-            console.log(data);
+            setKey(data);
         },
 
         initialValues: {
@@ -32,6 +36,9 @@ export const Signup = () => {
         },
         validationSchema,
     });
+    if (key) {
+        return <Navigate to='/dashboard' replace={true} />;
+    }
     return (
         <div>
             <header className='p-4 border border-b border-red-300'>
