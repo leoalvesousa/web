@@ -32,7 +32,7 @@ export const Login = () => {
         },
         validationSchema,
     });
-    if (key) {
+    if (key.access_token) {
         return <Navigate to='/dashboard' replace={true} />;
     }
     return (

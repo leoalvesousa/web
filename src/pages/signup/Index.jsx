@@ -36,7 +36,7 @@ export const Signup = () => {
         },
         validationSchema,
     });
-    if (key) {
+    if (key.access_token) {
         return <Navigate to='/dashboard' replace={true} />;
     }
     return (

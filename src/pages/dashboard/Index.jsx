@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 export const Dashboard = () => {
     const [key, setKey] = useLocalStorage("key", {});
 
-    if (!key) {
+    if (!key.access_token) {
         return <Navigate to='/' replace={true} />;
     }
     return (

@@ -5,11 +5,11 @@ import { Navigate } from "react-router-dom";
 export const Profile = () => {
     const [key, setKey] = useLocalStorage("key", {});
 
-    if (key?.user?.id) {
+    if (key.access_token) {
         return <Navigate to='/dashboard' replace={true} />;
     }
 
-    const logout = () => setKey({});
+    const logout = () => key.access_token({});
     return (
         <>
             <header className='bg-red-500 text-white'>

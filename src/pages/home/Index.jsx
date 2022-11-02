@@ -2,11 +2,6 @@ import { useLocalStorage } from "react-use";
 import { Navigate } from "react-router-dom";
 
 export const Home = () => {
-    const [key, setKey] = useLocalStorage("key", {});
-
-    if (key) {
-        return <Navigate to='/dashboard' replace={true} />;
-    }
     return (
         <div className='h-screen bg-red-700 text-white p-4 flex flex-col items-center space-y-6'>
             <header className='container max-w-5xl p-4 flex justify-center'>
