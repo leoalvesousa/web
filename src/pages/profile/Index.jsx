@@ -5,8 +5,8 @@ import { Navigate } from "react-router-dom";
 export const Profile = () => {
     const [key, setKey] = useLocalStorage("key", {});
 
-    if (key.access_token) {
-        return <Navigate to='/dashboard' replace={true} />;
+    if (!key.access_token) {
+        return <Navigate to='/' replace={true} />;
     }
 
     const logout = () => key.access_token({});

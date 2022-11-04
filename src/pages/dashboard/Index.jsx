@@ -1,9 +1,29 @@
-import { CardMatch, DateSelect, Icon } from "../../components";
-import { useLocalStorage } from "react-use";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { useAsyncFn, useLocalStorage } from "react-use";
+import axios from "axios";
+import { format, formatISO } from "date-fns";
+
+import { CardMatch, DateSelect, Icon } from "../../components";
 
 export const Dashboard = () => {
-    const [key, setKey] = useLocalStorage("key", {});
+    const [currentDate, setDate] = useState(formatISO(new Date(2022, 10, 20)));
+
+    const [key] = useLocalStorage("key", {});
+
+    const [state, doFetch] = useAsyncFn(async (params) => {
+        const { data } = await axios({
+            method: "get",
+            baseURL: "http://localhost:3000",
+            url: `game/${gameTime}`,
+            params,
+        });
+        return data;
+    });
+
+    useEffect(() => {
+        doFetch({ gameTime: currentDate });
+    }, [currentDate]);
 
     if (!key.access_token) {
         return <Navigate to='/' replace={true} />;
@@ -28,29 +48,21 @@ export const Dashboard = () => {
                 </section>
 
                 <section id='content' className='container max-w-3xl p-4 space-y-4'>
-                    <DateSelect />
+                    <DateSelect currentDate={currentDate} onChange={setDate} />
 
                     <div className='space-y-4'>
-                        <CardMatch
-                            teamA={{ slug: "sui" }}
-                            teamB={{ slug: "cam" }}
-                            matchHour={{ time: "7:00" }}
-                        />
-                        <CardMatch
-                            teamA={{ slug: "uru" }}
-                            teamB={{ slug: "cor" }}
-                            matchHour={{ time: "10:00" }}
-                        />
-                        <CardMatch
-                            teamA={{ slug: "por" }}
-                            teamB={{ slug: "gan" }}
-                            matchHour={{ time: "13:00" }}
-                        />
-                        <CardMatch
-                            teamA={{ slug: "bra" }}
-                            teamB={{ slug: "ser" }}
-                            matchHour={{ time: "16:00" }}
-                        />
+                        {state.loading && "Carregando Jogos ... "}
+                        {state.error && "Ops algo de errado ..."}
+
+                        {!state.loading &&
+                            !state.error &&
+                            state.value?.map((game) => (
+                                <CardMatch
+                                    homeTeam={{ slug: game.homeTeam }}
+                                    awayTeam={{ slug: game.awayTeam }}
+                                    gameTime={{ time: format(new Date(game.gameTime), "H:mm") }}
+                                />
+                            ))}
                     </div>
                 </section>
                 <div className=''></div>
